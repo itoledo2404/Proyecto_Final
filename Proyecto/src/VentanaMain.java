@@ -33,6 +33,7 @@ public class VentanaMain extends JFrame {
 	private VentanaExistencias frameExistencias;
 	private VentanaPedidos framePedidos;
 	private VentanaCompras frameCompras;
+	private VentanaEjecucion frameEjecucion;
 	//DB Manejador de la conexion
     Connection conexion = null;
 	/**
@@ -103,7 +104,7 @@ public class VentanaMain extends JFrame {
 		JButton btnPedidos = new JButton("Pedidos");
 		btnPedidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				framePedidos = new VentanaPedidos();
+				framePedidos = new VentanaPedidos(conexion);
 				framePedidos.setVisible(true);
 				framePedidos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
@@ -115,7 +116,7 @@ public class VentanaMain extends JFrame {
 		JButton btnCompras = new JButton("Compras");
 		btnCompras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frameCompras = new VentanaCompras();
+				frameCompras = new VentanaCompras(conexion);
 				frameCompras.setVisible(true);
 				frameCompras.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
@@ -127,7 +128,7 @@ public class VentanaMain extends JFrame {
 		JButton btnStock = new JButton("Stock");
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frameExistencias = new VentanaExistencias();
+				frameExistencias = new VentanaExistencias(conexion);
 				frameExistencias.setVisible(true);
 				frameExistencias.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
@@ -143,11 +144,27 @@ public class VentanaMain extends JFrame {
 		contentPane.add(panel_1);
 		
 		JButton btnRealizaCompra = new JButton("Realiza Compra");
+		btnRealizaCompra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frameEjecucion = new VentanaEjecucion(conexion,"compras","COM_ID");
+				frameEjecucion.setVisible(true);
+				frameEjecucion.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+			}
+		});
 		btnRealizaCompra.setIcon(new ImageIcon("C:\\MODULO\\img32\\Power-On.png"));
 		btnRealizaCompra.setBounds(10, 22, 170, 66);
 		panel_1.add(btnRealizaCompra);
 		
 		JButton btnRelizarPedido = new JButton("Reliza Pedido");
+		btnRelizarPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frameEjecucion = new VentanaEjecucion(conexion,"pedidos","PED_ID");
+				frameEjecucion.setVisible(true);
+				frameEjecucion.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+			}
+		});
 		btnRelizarPedido.setIcon(new ImageIcon("C:\\MODULO\\img32\\Power-On.png"));
 		btnRelizarPedido.setBounds(190, 22, 170, 66);
 		panel_1.add(btnRelizarPedido);

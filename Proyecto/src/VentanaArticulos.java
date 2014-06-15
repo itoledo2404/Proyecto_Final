@@ -21,7 +21,8 @@ import com.mysql.jdbc.Statement;
 
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.Color;
 
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ import javax.swing.JTextField;
 import java.lang.String;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 public class VentanaArticulos extends JFrame {
 
@@ -54,6 +56,7 @@ public class VentanaArticulos extends JFrame {
 	private JTextField txtDescripcion;
 	private JTextField txtNotas;
 	private JTextField txtUnidad;
+	private JCheckBox chckbxModificar;
 	GestionDB gestion;
 	
 	/**
@@ -87,6 +90,36 @@ public class VentanaArticulos extends JFrame {
 		
 		
 		table = new JTable();
+		
+		chckbxModificar = new JCheckBox("Modificar");
+		chckbxModificar.setBounds(21, 397, 97, 23);
+		contentPane.add(chckbxModificar);
+		// set state
+		chckbxModificar.setSelected(false);
+		
+			/*Gestion para obtener los valores de jtable*/
+			table.addMouseListener(new MouseAdapter() {
+		         @Override
+		         public void mouseClicked(MouseEvent arg0) {
+		         //Obtenemos la fila seleccionada
+		         int fila=table.getSelectedRow();
+		      // check state
+		 		if (chckbxModificar.isSelected()) {
+		 		 
+		         //Obtenemos el valor
+		         String art=table.getValueAt(fila, 0).toString();
+		         String desc=table.getValueAt(fila, 1).toString();
+		         String notas=table.getValueAt(fila, 2).toString();
+		         String unidad=table.getValueAt(fila, 3).toString();
+		         txtArticulo.setText(art);
+		         txtDescripcion.setText(desc);
+		         txtNotas.setText(notas);
+		         txtUnidad.setText(unidad);
+		 		} 
+		         }
+		        });
+		 
+		
 		table.setModel(dtm);
 		
 		
@@ -104,6 +137,10 @@ public class VentanaArticulos extends JFrame {
 				
 				gestion.InsertArticulos(txtArticulo.getText(), txtDescripcion.getText(), txtNotas.getText(), txtUnidad.getText());
 				RellenarJtable();
+				txtArticulo.setText("");
+				txtDescripcion.setText("");
+				txtNotas.setText("");
+				txtUnidad.setText("");
 			}
 		});
 		btnNuevo.setIcon(new ImageIcon("C:\\MODULO\\img32\\Add.png"));
@@ -115,6 +152,10 @@ public class VentanaArticulos extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				gestion.UpdateArticulos(txtArticulo.getText(), txtDescripcion.getText(), txtNotas.getText(), txtUnidad.getText());
 				RellenarJtable();
+				txtArticulo.setText("");
+				txtDescripcion.setText("");
+				txtNotas.setText("");
+				txtUnidad.setText("");
 			}
 		});
 		btnModificar.setIcon(new ImageIcon("C:\\MODULO\\img32\\File1-Edit1.png"));
@@ -126,6 +167,10 @@ public class VentanaArticulos extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				gestion.DeleteArticulos(txtArticulo.getText());
 				RellenarJtable();
+				txtArticulo.setText("");
+				txtDescripcion.setText("");
+				txtNotas.setText("");
+				txtUnidad.setText("");
 			}
 		});
 		btnEliminar.setIcon(new ImageIcon("C:\\MODULO\\img32\\Delete1.png"));
@@ -173,6 +218,8 @@ public class VentanaArticulos extends JFrame {
 		txtUnidad.setColumns(10);
 		txtUnidad.setBounds(83, 114, 315, 20);
 		panel.add(txtUnidad);
+		
+		
 
 
 }
@@ -210,6 +257,4 @@ public class VentanaArticulos extends JFrame {
 	    	}// fin de catch
 	    	
 	    }
-	   
-	  
 }

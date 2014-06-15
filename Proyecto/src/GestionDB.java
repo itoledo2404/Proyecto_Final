@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -6,7 +7,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.Statement;
-public class GestionDB {
+public class GestionDB implements Serializable{
 	//Creo los elementos de conexion a la BD
 		Statement instruccion = null;// instrucción de consulta
 		ResultSet Resultado = null;// maneja los resultados
@@ -19,7 +20,7 @@ public class GestionDB {
 	    
 	    
 	}
-	
+	//Gestion del MAestro de Articulos
 	public void InsertArticulos(String Articulo,String Descripcion,String Notas, String Unidad) {
 	
 		try{
@@ -92,26 +93,75 @@ public class GestionDB {
 		}// fin
 			
 	}
-	public void ControlArticulos(String Articulo) {
+	//Gestion del Stock	
+	public void InsertStock(int ubicacion,String Articulo,String Posicion,double Existencia) {
 			
-			try{
-				
-				if (Articulo.equals(""))
-				{
-					JOptionPane.showMessageDialog(null,"Debe introducir un codigo Articulo");
-				}else{
+		try{
 				// consulta la base de datos
 				instruccion = (Statement) conexion.createStatement();
-				// insercion en base de datos
-				String sql_delete=" DELETE FROM dat_articulos WHERE art_articulo =  ";
-				sql_delete =sql_delete + "'"+Articulo+"'";
-				JOptionPane.showMessageDialog(null,sql_delete);
-				instruccion.executeUpdate(sql_delete);}
-			}catch( SQLException excepcionSql ){
-			excepcionSql.printStackTrace();
-			}// fin
 				
-		}
+				// insercion en base de datos
+				String sql_inst="INSERT INTO dat_stock( st_ubicacion,st_articulo,st_posicion,st_existencia)";
+				sql_inst=sql_inst+ "VALUES( "+ubicacion+",'"+Articulo+"','"+Posicion+"',"+Existencia +")";
+				System.out.println(sql_inst);
+				instruccion.executeUpdate(sql_inst);
+			
 	
-
+		}catch( SQLException excepcionSql ){
+		excepcionSql.printStackTrace();
+		}// fin
+			
+	}
+    public void UpdateStock(int ubicacion,String Articulo,String Posicion,double Existencia) {
+		
+		try{
+			
+			// consulta la base de datos
+			instruccion = (Statement) conexion.createStatement();
+			// insercion en base de datos
+			String sql_update="UPDATE dat_stock SET ";
+			sql_update=sql_update + "st_articulo = " + "'"+Articulo+"'"+ ",st_posicion = " + "'"+Posicion+"'"+ ",st_existencia= "+  Existencia + "WHERE st_ubicacion =" + ubicacion ;
+			System.out.println(sql_update);
+			instruccion.executeUpdate(sql_update);
+			
+		}catch( SQLException excepcionSql ){
+		excepcionSql.printStackTrace();
+		}// fin
+		
+			
+	}
+	public void DeleteStock(int ubicacion) {
+		
+		try{
+			
+			// consulta la base de datos
+			instruccion = (Statement) conexion.createStatement();
+			// insercion en base de datos
+			String sql_delete=" DELETE FROM dat_stock WHERE st_ubicacion =  ";
+			sql_delete =sql_delete + ubicacion;
+			JOptionPane.showMessageDialog(null,sql_delete);
+			instruccion.executeUpdate(sql_delete);
+		}catch( SQLException excepcionSql ){
+		excepcionSql.printStackTrace();
+		}// fin
+			
+	}
+	
+public void DeleteLineaPedidos(String pedido, String Articulo) {
+		
+		try{
+			
+			// consulta la base de datos
+			instruccion = (Statement) conexion.createStatement();
+			// insercion en base de datos
+			String sql_delete=" DELETE FROM pedidos WHERE PED_ID =  ";
+			sql_delete =sql_delete + "'" + pedido + "'" + " AND PED_ARTICULO = "+"'" + Articulo + "'" ;
+			JOptionPane.showMessageDialog(null,sql_delete);
+			instruccion.executeUpdate(sql_delete);
+		}catch( SQLException excepcionSql ){
+		excepcionSql.printStackTrace();
+		}// fin
+			
+	}
+	
 }
