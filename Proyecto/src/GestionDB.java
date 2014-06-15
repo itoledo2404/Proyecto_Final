@@ -86,7 +86,7 @@ public class GestionDB implements Serializable{
 			// insercion en base de datos
 			String sql_delete=" DELETE FROM dat_articulos WHERE art_articulo =  ";
 			sql_delete =sql_delete + "'"+Articulo+"'";
-			JOptionPane.showMessageDialog(null,sql_delete);
+			System.out.println(sql_delete);
 			instruccion.executeUpdate(sql_delete);}
 		}catch( SQLException excepcionSql ){
 		excepcionSql.printStackTrace();
@@ -139,7 +139,7 @@ public class GestionDB implements Serializable{
 			// insercion en base de datos
 			String sql_delete=" DELETE FROM dat_stock WHERE st_ubicacion =  ";
 			sql_delete =sql_delete + ubicacion;
-			JOptionPane.showMessageDialog(null,sql_delete);
+			System.out.println(sql_delete);
 			instruccion.executeUpdate(sql_delete);
 		}catch( SQLException excepcionSql ){
 		excepcionSql.printStackTrace();
@@ -207,7 +207,7 @@ public void DeleteLineaPedidos(String pedido, String Articulo) {
 			// insercion en base de datos
 			String sql_delete=" DELETE FROM pedidos WHERE PED_ID =  ";
 			sql_delete =sql_delete + "'" + pedido + "'" + " AND PED_ARTICULO = "+"'" + Articulo + "'" ;
-			JOptionPane.showMessageDialog(null,sql_delete);
+			System.out.println(sql_delete);
 			instruccion.executeUpdate(sql_delete);
 		}catch( SQLException excepcionSql ){
 		excepcionSql.printStackTrace();
@@ -275,7 +275,7 @@ public void DeleteLineaCompras(String pedido, String Articulo) {
 		// insercion en base de datos
 		String sql_delete=" DELETE FROM compras WHERE COM_ID =  ";
 		sql_delete =sql_delete + "'" + pedido + "'" + " AND COM_ARTICULO = "+"'" + Articulo + "'" ;
-		JOptionPane.showMessageDialog(null,sql_delete);
+		System.out.println(sql_delete);
 		instruccion.executeUpdate(sql_delete);
 	}catch( SQLException excepcionSql ){
 	excepcionSql.printStackTrace();
