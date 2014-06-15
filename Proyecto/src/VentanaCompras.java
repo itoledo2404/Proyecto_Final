@@ -57,7 +57,7 @@ public class VentanaCompras extends JFrame {
 	Connection conexion = null; //mamnejador de conexion
 	private JTextField txtPedido;
 	private JTextField txtDescripcion;
-	private JTextField txtExistencia;
+	private JTextField txtCantidad;
 	private JCheckBox chckbxModificar;
 	private JComboBox comboBox;
 	private String desplegable;
@@ -68,7 +68,7 @@ public class VentanaCompras extends JFrame {
 	 */
 	public VentanaCompras(Connection conexion) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\MODULO\\img32\\Paste2.png"));
-		setTitle("Pedidos");
+		setTitle("Compras");
 		this.conexion=conexion;
 		gestion = new GestionDB(this.conexion);
 		
@@ -111,14 +111,14 @@ public class VentanaCompras extends JFrame {
 		 		if (chckbxModificar.isSelected()) {
 		 		 
 		         //Obtenemos el valor
-		         String art=table.getValueAt(fila, 0).toString();
+		         String ped=table.getValueAt(fila, 0).toString();
 		         String desc=table.getValueAt(fila, 1).toString();
-		         String notas=table.getValueAt(fila, 2).toString();
-		         String unidad=table.getValueAt(fila, 3).toString();
-		         txtPedido.setText(art);
-		         comboBox.setSelectedItem(desc);
-		         txtDescripcion.setText(notas);
-		         txtExistencia.setText(unidad);
+		         String art=table.getValueAt(fila, 2).toString();
+		         String stock=table.getValueAt(fila, 3).toString();
+		         txtPedido.setText(ped);
+		         comboBox.setSelectedItem(art);
+		         txtDescripcion.setText(desc);
+		         txtCantidad.setText(stock);
 		 		} 
 		         }
 		        });
@@ -138,20 +138,20 @@ public class VentanaCompras extends JFrame {
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				desplegable = (String) comboBox.getSelectedItem();
-				int txt1 = Integer.valueOf(txtPedido.getText());
-				double txt2 =  Double.valueOf(txtExistencia.getText());
+			
+				double txt1 =  Double.valueOf(txtCantidad.getText());
 				
-				if (txt1 == 0 || txt2 == 0)
+				if (txt1 == 0 )
 				{
-					JOptionPane.showMessageDialog(null,"Debe introducir los campos obligatorios (Ubicacion y existencia)");
+					JOptionPane.showMessageDialog(null,"La Cantida no puede ser 0");
 				}
 				else
 				{
-					gestion.InsertStock(txt1, desplegable, txtDescripcion.getText(), txt2);
+					gestion.InsertLineaCompras(txtPedido.getText(), txtDescripcion.getText(),desplegable, txt1);
 					RellenarJtable();
 					txtPedido.setText("0");
 					txtDescripcion.setText("");
-					txtExistencia.setText("0");
+					txtCantidad.setText("0");
 					comboBox.setSelectedIndex(-1);
 				}
 			}
@@ -164,22 +164,15 @@ public class VentanaCompras extends JFrame {
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				desplegable = (String) comboBox.getSelectedItem();
-				int txt1 = Integer.valueOf(txtPedido.getText());
-				double txt2 =  Double.valueOf(txtExistencia.getText());
+				double txt1 =  Double.valueOf(txtCantidad.getText());
 				
-				if (txt1 == 0 || txt2 == 0)
-				{
-					JOptionPane.showMessageDialog(null,"Debe introducir los campos obligatorios (Ubicacion y existencia)");
-				}
-				else
-				{
-				gestion.UpdateStock(txt1, desplegable, txtDescripcion.getText(), txt2);
+				gestion.UpdateLineaCompras(txtPedido.getText(), txtDescripcion.getText(),desplegable, txt1);
 				RellenarJtable();
 				txtPedido.setText("0");
 				txtDescripcion.setText("");
-				txtExistencia.setText("0");
+				txtCantidad.setText("0");
 				comboBox.setSelectedIndex(-1);
-				}
+				
 			}
 		});
 		btnModificar.setIcon(new ImageIcon("C:\\MODULO\\img32\\File1-Edit1.png"));
@@ -189,20 +182,15 @@ public class VentanaCompras extends JFrame {
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int txt1 = Integer.valueOf(txtPedido.getText());
 				
-				if (txt1 == 0)
-				{
-					JOptionPane.showMessageDialog(null,"Debe introducir los campos obligatorios (Ubicacion)");
-				}
-				else
-				{
-				gestion.DeleteStock(txt1);
+				desplegable = (String) comboBox.getSelectedItem();
+				
+				gestion.DeleteLineaCompras(txtPedido.getText(),desplegable);
 				RellenarJtable();
 				txtPedido.setText("0");
 				txtDescripcion.setText("");
-				txtExistencia.setText("0");
-				comboBox.setSelectedIndex(-1);}
+				txtCantidad.setText("0");
+				comboBox.setSelectedIndex(-1);
 			}
 		});
 		btnEliminar.setIcon(new ImageIcon("C:\\MODULO\\img32\\Delete1.png"));
@@ -233,7 +221,7 @@ public class VentanaCompras extends JFrame {
 		txtDescripcion.setBounds(83, 83, 315, 20);
 		panel.add(txtDescripcion);
 		
-		JLabel lbldes = new JLabel("Descripcion");
+		JLabel lbldes = new JLabel("Proveedor");
 		lbldes.setBounds(10, 86, 81, 14);
 		panel.add(lbldes);
 		
@@ -241,11 +229,11 @@ public class VentanaCompras extends JFrame {
 		lblCantidad.setBounds(10, 117, 81, 14);
 		panel.add(lblCantidad);
 		
-		txtExistencia = new JTextField();
-		txtExistencia.setText("0");
-		txtExistencia.setColumns(10);
-		txtExistencia.setBounds(83, 114, 315, 20);
-		panel.add(txtExistencia);
+		txtCantidad = new JTextField();
+		txtCantidad.setText("0");
+		txtCantidad.setColumns(10);
+		txtCantidad.setBounds(83, 114, 315, 20);
+		panel.add(txtCantidad);
 		  
 		comboBox = new JComboBox();
 		comboBox.setBounds(83, 52, 315, 20);
@@ -256,7 +244,7 @@ public class VentanaCompras extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				txtPedido.setText("0");
 				txtDescripcion.setText("");
-				txtExistencia.setText("0");
+				txtCantidad.setText("0");
 				comboBox.setSelectedIndex(-1);
 			}
 		});
@@ -294,7 +282,7 @@ public class VentanaCompras extends JFrame {
 	    //Encabezados de la tabla
 	    private String[] rellenarTitColumnas()
 	    {
-	          String columna[]=new String[]{"Pedido","Descripcion","Articulo","Cantidad"};
+	          String columna[]=new String[]{"Pedido","Proveedor","Articulo","Cantidad"};
 	          return columna;
 	    }
 	    private void RellenarJtable(){
@@ -309,7 +297,7 @@ public class VentanaCompras extends JFrame {
 	    	// crea objeto Statement para consultar la base de datos
 	    	instruccion = (Statement) this.conexion.createStatement();
 	    	// consulta la base de datos
-	    	conjuntoResultados = instruccion.executeQuery("SELECT * FROM pedidos");
+	    	conjuntoResultados = instruccion.executeQuery("SELECT * FROM compras");
 	    	//Añadir datos al modelo
 	    	Object datos[]=new Object[4]; //Numero de columnas de la tabla
 	    	while (conjuntoResultados.next()) {
