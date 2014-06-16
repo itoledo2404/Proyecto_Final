@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
 import java.awt.Font;
+import javax.swing.JLabel;
 
 
 public class VentanaEjecucion extends JFrame {
@@ -62,17 +63,19 @@ public class VentanaEjecucion extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\MODULO\\img32\\Power-On.png"));
 		setTitle("Ejecucion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 531, 300);
+		setBounds(100, 100, 531, 364);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		comboBox = new JComboBox();
-		comboBox.setBounds(40, 11, 424, 20);
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		comboBox.setBounds(40, 38, 424, 20);
 		contentPane.add(comboBox);
 		
 		JButton btnNewButton = new JButton("Ejecuta");
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnNewButton.setIcon(new ImageIcon("C:\\MODULO\\img48\\Hand2.png"));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,14 +83,24 @@ public class VentanaEjecucion extends JFrame {
 				ejecucion(desplegable,tipoop);
 			}
 		});
-		btnNewButton.setBounds(115, 87, 291, 100);
+		btnNewButton.setBounds(111, 145, 291, 100);
 		contentPane.add(btnNewButton);
 		
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField.setBounds(5, 217, 500, 20);
+		textField.setBounds(10, 295, 500, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Mensaje de Error");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel.setBounds(10, 270, 131, 14);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Seleccione el Pedido:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1.setBounds(10, 13, 195, 14);
+		contentPane.add(lblNewLabel_1);
 		rellenarCombo();
 	}
 	//Rellenamos el combo con la tabla articulos
