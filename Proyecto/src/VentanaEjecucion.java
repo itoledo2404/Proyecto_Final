@@ -24,7 +24,9 @@ import com.mysql.jdbc.Statement;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextField;
+
 import java.awt.Font;
 
 
@@ -123,6 +125,7 @@ public class VentanaEjecucion extends JFrame {
 		try{
 			String campo1 ="";
 			String campo2="";
+			String existencia;
 			String campoSql1="";
 			String campoSql2="";
 			String operador="";
@@ -134,13 +137,13 @@ public class VentanaEjecucion extends JFrame {
 				filtro = "COM_ID";
 				campoSql1="COM_ARTICULO";
 				campoSql2="COM_CANTIDAD";
-				operador = "st_existencia - ";
+				operador = "st_existencia + ";
 				break; 
 			case "pedidos":
 				filtro = "PED_ID";
 				campoSql1="PED_ARTICULO";
 				campoSql2="PED_CANTIDAD";
-				operador = "st_existencia + ";
+				operador = "st_existencia - ";
 				break; 
 			
 			}
@@ -158,17 +161,23 @@ public class VentanaEjecucion extends JFrame {
 	    		// consulta la base de datos
 				instruccion = (Statement) conexion.createStatement();
 				// Buscamos si existe el Articulo en la tabla stock
-				ResultControl= instruccion.executeQuery ("SELECT ST_ARTICULO FROM dat_stock WHERE ST_ARTICULO  = "+ "'"+campo1+"'" );		 
-
+				ResultControl= instruccion.executeQuery ("SELECT ST_ARTICULO, ST_EXISTENCIA FROM dat_stock WHERE ST_ARTICULO  = "+ "'"+campo1+"'" );		 
 				// Si no existe lo avisamos de que no todas las filas se han completado
 				if (!ResultControl.next()) {
-					
 					
 					textField.setText("Linas de pedido si procesar verifique los pedidos y las ubicaciones");
 					
 				}else{
-	    		
-	    		//Actualizo el stock
+	    		//Controlo si hay suficioente material para servir el pedido
+				existencia = ResultControl.getString("ST_EXISTENCIA"); 
+				double oper1,oper2;
+				oper1 = Double.parseDouble(campo2);
+				oper2 = Double.parseDouble(existencia);	
+				if ((oper2 < oper1) && (tipo =="pedidos"))
+				{
+					textField.setText("No se pueden procesar algunas lineas del pedido ya que no hay stock suficiente");
+				}else{
+	    		//Actualizo el stock SEGUN EL TIPO DE OPERACION (COMPARAS SUMO Y PEDIDOS RESTO)
 	    		insupdate = (Statement) conexion.createStatement();	
 	    		String sql_update="UPDATE dat_stock SET ";
 	    		sql_update=sql_update + " st_existencia= " + operador +  campo2 + " WHERE  " + "st_articulo = " + "'"+campo1+"'" ;
@@ -179,7 +188,7 @@ public class VentanaEjecucion extends JFrame {
 				String sql_delete=" DELETE FROM " + tipo + " WHERE " + filtro + " = " + "'"+ pedido +"'";
 				sql_delete =sql_delete + "AND " + campoSql1 + " = " +"'" + campo1 + "'" ;
 				System.out.println(sql_delete);
-				insdelete.executeUpdate(sql_delete);
+				insdelete.executeUpdate(sql_delete);}
 				}
 	    	}
 	    	Resultado.close();

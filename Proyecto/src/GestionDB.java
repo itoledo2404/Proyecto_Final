@@ -146,7 +146,8 @@ public class GestionDB implements Serializable{
 		}// fin
 			
 	}
-	public void InsertLineaPedido(String Pedido,String Descripcion,String Articulo, double cantidad) {
+//Gestion Pedidos
+public void InsertLineaPedido(String Pedido,String Descripcion,String Articulo, double cantidad) {
 		
 		try{
 			if (Articulo.equals("") || Pedido.equals(""))
@@ -177,7 +178,7 @@ public class GestionDB implements Serializable{
 		}// fin
 			
 	}
-	public void UpdateLineaPedido(String Pedido,String Descripcion,String Articulo, double cantidad) {
+public void UpdateLineaPedido(String Pedido,String Descripcion,String Articulo, double cantidad) {
 		
 		try{
 			if (Articulo.equals("") || Pedido.equals(""))
@@ -214,6 +215,7 @@ public void DeleteLineaPedidos(String pedido, String Articulo) {
 		}// fin
 			
 	}
+//Gestion pedidos de compras
 public void InsertLineaCompras(String Pedido,String Descripcion,String Articulo, double cantidad) {
 	
 	try{
